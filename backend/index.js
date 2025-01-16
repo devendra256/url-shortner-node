@@ -41,6 +41,22 @@ app.post('/shorten', async (req, res) => {
 
 })
 
+app.post('/visit/', async (req, res) => {
+    // not working
+    const shortUrl = await ShortUrl.findOne({ shortUrl: req.query.shortUrl });
+    console.log(shortUrl);
+    if (shortUrl) {
+        shortUrl.clicks += 1;
+        await shortUrl.save();
+    }
+    
+    res.send({
+        message: "Hello",
+        data: req.query ?? "No data found",
+    }).status(200);
+
+})
+
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 })
