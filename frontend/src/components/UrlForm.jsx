@@ -35,6 +35,20 @@ function UrlForm() {
         }
     }
 
+    const visitUrl = async (shortUrl) => {
+        window.open(shortUrl, "_blank");
+        const response = await fetch("http://localhost:3000/visit/", {
+            method: "POST",
+            headers: {
+                'Content-Type': "application/json",
+            },
+            body: JSON.stringify({ shortUrl })
+        });
+        if (!response.ok) {
+            alert("Something went wrong");            
+        }
+    }
+
     return (
         <>
             <form>
@@ -76,18 +90,18 @@ function UrlForm() {
                                         <a href={item.fullUrl} target="_blank" rel="noopener noreferrer">{item.fullUrl}</a>
                                     </td>
                                     <td className="px-4 py-3 text-blue-600 underline">
-                                        <a href={item.shortUrl} target="_blank" rel="noopener noreferrer">{item.shortUrl}</a>
+                                        <button onClick={() => visitUrl(item.shortUrl)}>{item.shortUrl} ↗️</button>
                                     </td>
                                     <td className="px-4 py-3 text-gray-700">{item.clicks}</td>
                                     <td className="px-4 py-3 flex gap-2">
                                         <button
                                             className="bg-gray-500 hover:bg-gray-700 text-white text-sm font-medium py-2 px-4 rounded shadow"
                                             onClick={copyHandler}
-                                        >Visit ↗️</button>
+                                        >Copy 📃</button>
                                         <button
                                             className="bg-red-500 hover:bg-red-700 text-white text-sm font-medium py-2 px-4 rounded shadow"
                                             onClick={deleteHandler}
-                                        >Delete</button>
+                                        >Delete 🗑️</button>
                                     </td>
                                 </tr>
                             ))
