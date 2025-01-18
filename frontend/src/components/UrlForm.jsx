@@ -36,7 +36,6 @@ function UrlForm() {
     }
 
     const visitUrl = async (shortUrl) => {
-        window.open(shortUrl, "_blank");
         const response = await fetch("http://localhost:3000/visit/", {
             method: "POST",
             headers: {
@@ -47,6 +46,9 @@ function UrlForm() {
         if (!response.ok) {
             alert("Something went wrong");            
         }
+        const data = await response.json();
+        console.log(data);
+        window.open(data.data, "_blank");
     }
 
     return (

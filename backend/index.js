@@ -42,19 +42,18 @@ app.post('/shorten', async (req, res) => {
 })
 
 app.post('/visit/', async (req, res) => {
-    // not working
-    const shortUrl = await ShortUrl.findOne({ shortUrl: req.query.shortUrl });
-    console.log(shortUrl);
-    if (shortUrl) {
-        shortUrl.clicks += 1;
-        await shortUrl.save();
-    }
-    
-    res.send({
-        message: "Hello",
-        data: req.query ?? "No data found",
-    }).status(200);
+    console.log("Request query: ", req.body.shortUrl);
 
+    const result = await ShortUrl.findOne({ shortUrl: req.body.shortUrl });
+    console.log(result);
+    if (result) {
+        result.clicks += 1;
+        await result.save();
+    }
+    res.status(200).send({
+        message: "Hello",
+        data: result.fullUrl ?? "No data found",
+    });
 })
 
 app.listen(3000, () => {
