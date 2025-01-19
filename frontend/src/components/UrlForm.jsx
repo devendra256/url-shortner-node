@@ -19,19 +19,28 @@ function UrlForm() {
     }
 
     const copyHandler = (fullUrl) => {
-        console.log("Copied", fullUrl);
         navigator.clipboard.writeText(fullUrl);
         alert("Copied to clipboard");
     }
 
-    const deleteHandler = () => {
-        console.log("Deleted");
+    const deleteHandler = async (shortUrl) => {
+        const response = await fetch("http://localhost:3000/delete", {
+            method: "DELETE",
+            headers: {
+                'Content-Type': "application/json",
+            },
+            body: JSON.stringify({ shortUrl })
+        });
+        if (!response.ok) {
+            alert("Something went wrong");
+            return;
+        }
+        alert("Deleted successfully");
     }
 
     const showAllUrls = async () => {
         const response = await fetch("http://localhost:3000/urls");
         const data = await response.json();
-        document.querySelector('#shortUrls').innerHTML = "";
         if (data.status === "success") {
             setUrlData(data.data);
         }
@@ -86,7 +95,7 @@ function UrlForm() {
                             <th className="px-4 py-3">Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="shortUrls" className="divide-y divide-gray-200">
+                    <tbody className="divide-y divide-gray-200">
                         {
                             urlData.map((item) => (
                                 <tr key={item._id} className="hover:bg-gray-50">
@@ -111,7 +120,7 @@ function UrlForm() {
                                         >Copy 📃</button>
                                         <button
                                             className="bg-red-500 hover:bg-red-700 text-white text-sm font-medium py-2 px-4 rounded shadow"
-                                            onClick={deleteHandler}
+                                            onClick={() => deleteHandler(item.shortUrl)}
                                         >Delete 🗑️</button>
                                     </td>
                                 </tr>

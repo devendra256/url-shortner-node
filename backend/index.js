@@ -56,6 +56,15 @@ app.post('/visit/', async (req, res) => {
     });
 })
 
+app.delete('/delete', async (req, res) => {
+    const result = await ShortUrl.deleteOne({ shortUrl: req.body.shortUrl });
+    console.log(result);
+    res.status(200).send({
+        status: 'success',
+        data: result
+    });
+})
+
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 })
