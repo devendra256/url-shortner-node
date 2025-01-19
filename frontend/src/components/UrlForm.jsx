@@ -18,8 +18,10 @@ function UrlForm() {
         console.log(data);
     }
 
-    const copyHandler = () => {
-        console.log("Copied", this);
+    const copyHandler = (fullUrl) => {
+        console.log("Copied", fullUrl);
+        navigator.clipboard.writeText(fullUrl);
+        alert("Copied to clipboard");
     }
 
     const deleteHandler = () => {
@@ -44,7 +46,7 @@ function UrlForm() {
             body: JSON.stringify({ shortUrl })
         });
         if (!response.ok) {
-            alert("Something went wrong");            
+            alert("Something went wrong");
         }
         const data = await response.json();
         console.log(data);
@@ -89,16 +91,23 @@ function UrlForm() {
                             urlData.map((item) => (
                                 <tr key={item._id} className="hover:bg-gray-50">
                                     <td className="px-4 py-3 text-blue-600 underline">
-                                        <a href={item.fullUrl} target="_blank" rel="noopener noreferrer">{item.fullUrl}</a>
+                                        <a
+                                            href={item.fullUrl}
+                                            target="_blank"
+                                        >{item.fullUrl}</a>
                                     </td>
                                     <td className="px-4 py-3 text-blue-600 underline">
-                                        <button onClick={() => visitUrl(item.shortUrl)}>{item.shortUrl} ↗️</button>
+                                        <button
+                                            onClick={() => visitUrl(item.shortUrl)}
+                                            className="hover:underline"
+                                            
+                                        >{item.shortUrl} ↗️</button>
                                     </td>
                                     <td className="px-4 py-3 text-gray-700">{item.clicks}</td>
                                     <td className="px-4 py-3 flex gap-2">
                                         <button
                                             className="bg-gray-500 hover:bg-gray-700 text-white text-sm font-medium py-2 px-4 rounded shadow"
-                                            onClick={copyHandler}
+                                            onClick={() => copyHandler(item.fullUrl)}
                                         >Copy 📃</button>
                                         <button
                                             className="bg-red-500 hover:bg-red-700 text-white text-sm font-medium py-2 px-4 rounded shadow"
